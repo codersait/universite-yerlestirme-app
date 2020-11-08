@@ -13,37 +13,38 @@ public class Main {
             tumIsimler.add(item.getOgrenciAdi());
         }
 
+
         ArrayList<Sonuc> yerlesenler = yerlestimeYap(list);
         ArrayList<String> yerlesemeyenler = new ArrayList<>();
         ArrayList<String> yerlesenisimler = new ArrayList<>();
 
-        for (Sonuc item:yerlesenler){
+        for (Sonuc item : yerlesenler) {
             System.out.println(item);
             yerlesenisimler.add(item.getName());
         }
 
-        for (String item:tumIsimler){
-            if(!yerlesenisimler.contains(item)){
+        for (String item : tumIsimler) {
+            if (!yerlesenisimler.contains(item)) {
                 yerlesemeyenler.add(item);
             }
         }
 
-        for (String name:yerlesemeyenler){
-            System.out.println(name+": Yerlesemedi!!!");
+        for (String name : yerlesemeyenler) {
+            System.out.println(name + ": Yerlesemedi!!!");
         }
 
     }
 
     private static ArrayList<Sonuc> yerlestimeYap(ArrayList<Tercih> list) {
-        int kontenjanIzm = 3;
-        int kontenjanIst = 5;
-        int kontenjanAnk = 4;
+        int kontenjanIzm = 10;
+        int kontenjanIst = 18;
+        int kontenjanAnk = 12;
 
         ArrayList<Sonuc> sonucListesi = new ArrayList<>();
 
 
-        while (list.size()>0) {
-            double max = 0;
+        while (list.size() > 0) {
+            double max = -10000;
             Tercih ogrenci = new Tercih();
 
             for (Tercih item : list) {
@@ -52,23 +53,26 @@ public class Main {
                     ogrenci = item;
                 }
             }
-
-            for (String item: ogrenci.getTercih()){
-                if(item.equals("IZM") && kontenjanIzm > 0){
-                    Sonuc sonuc = new Sonuc(ogrenci.getOgrenciAdi(), "IZM",ogrenci.getPuan());
-                    sonucListesi.add(sonuc);
-                    kontenjanIzm--;
-                    break;
-                } else if(item.equals("ANK") && kontenjanAnk > 0){
-                    Sonuc sonuc = new Sonuc(ogrenci.getOgrenciAdi(), "ANK",ogrenci.getPuan());
-                    sonucListesi.add(sonuc);
-                    kontenjanAnk--;
-                    break;
-                }else if(item.equals("IST") && kontenjanIst > 0){
-                    Sonuc sonuc = new Sonuc(ogrenci.getOgrenciAdi(), "IST",ogrenci.getPuan());
-                    sonucListesi.add(sonuc);
-                    kontenjanIst--;
-                    break;
+            if (ogrenci.getPuan() < 0) {
+                Sonuc sonuc = new Sonuc(ogrenci.getOgrenciAdi(), null, ogrenci.getPuan());
+            } else {
+                for (String item : ogrenci.getTercih()) {
+                    if (item.equals("IZM") && kontenjanIzm > 0) {
+                        Sonuc sonuc = new Sonuc(ogrenci.getOgrenciAdi(), "IZM", ogrenci.getPuan());
+                        sonucListesi.add(sonuc);
+                        kontenjanIzm--;
+                        break;
+                    } else if (item.equals("ANK") && kontenjanAnk > 0) {
+                        Sonuc sonuc = new Sonuc(ogrenci.getOgrenciAdi(), "ANK", ogrenci.getPuan());
+                        sonucListesi.add(sonuc);
+                        kontenjanAnk--;
+                        break;
+                    } else if (item.equals("IST") && kontenjanIst > 0) {
+                        Sonuc sonuc = new Sonuc(ogrenci.getOgrenciAdi(), "IST", ogrenci.getPuan());
+                        sonucListesi.add(sonuc);
+                        kontenjanIst--;
+                        break;
+                    }
                 }
             }
             list.remove(ogrenci);
@@ -101,16 +105,22 @@ public class Main {
 
     private static void getOgrenciTercih(ArrayList<Tercih> list, String[] bilgi, double ogrenciPuan) {
         ArrayList<String> ogrenciTercih = new ArrayList<>();
-        if (bilgi[0].equals("METIN")) {
-            ogrenciTercih.add("IZM");
-            ogrenciTercih.add("IST");
-            ogrenciTercih.add("ANK");
-        } else if (bilgi[0].equals("ALI")) {
-            ogrenciTercih.add("IZM");
-        } else if (bilgi[0].equals("FEYYAZ")) {
-            ogrenciTercih.add("ANK");
-            ogrenciTercih.add("IZM");
+        String[] tercihler = bilgi[3].split(" ");
+        for (String tercih : tercihler) {
+            ogrenciTercih.add(tercih);
         }
+//
+//
+//        if (bilgi[0].equals("METIN")) {
+//            ogrenciTercih.add("IZM");
+//            ogrenciTercih.add("IST");
+//            ogrenciTercih.add("ANK");
+//        } else if (bilgi[0].equals("ALI")) {
+//            ogrenciTercih.add("IZM");
+//        } else if (bilgi[0].equals("FEYYAZ")) {
+//            ogrenciTercih.add("ANK");
+//            ogrenciTercih.add("IZM");
+//        }
         Tercih ogrenci = new Tercih(bilgi[0], bilgi[1], bilgi[2],
                 ogrenciPuan, ogrenciTercih);
         list.add(ogrenci);
@@ -140,7 +150,7 @@ public class Main {
         for (int i = 0; i < 20; i++) {
             if (sozelAnahtar.charAt(i) == bilgi[2].charAt(i)) {
                 ogrenciPuan += 2;
-            } else if (bilgi[1].charAt(i) != ' ') {
+            } else if (bilgi[2].charAt(i) != ' ') {
                 ogrenciPuan -= 0.50;
             }
         }
@@ -149,7 +159,7 @@ public class Main {
         for (int i = 20; i < 30; i++) {
             if (sozelAnahtar.charAt(i) == bilgi[2].charAt(i)) {
                 ogrenciPuan += 1;
-            } else if (bilgi[1].charAt(i) != ' ') {
+            } else if (bilgi[2].charAt(i) != ' ') {
                 ogrenciPuan -= 0.25;
             }
         }
